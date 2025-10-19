@@ -2,6 +2,10 @@
 
 A Raspberry Pi cryptocurrency price display system with support for e-ink and color LCD screens. Monitor real-time token prices, 24h changes, volume, and liquidity from multiple data sources.
 
+![TETSUO Display Device](docs/images/device-final.png)
+
+**[📺 Watch Demo Video on X](https://x.com/d4rkpavel/status/1978458244147200181)**
+
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.7+-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Raspberry%20Pi-red.svg)
@@ -44,6 +48,35 @@ A Raspberry Pi cryptocurrency price display system with support for e-ink and co
 - ST7735S 1.44" Color LCD (128×128)
 - 5-way joystick (optional)
 - MicroSD card (8GB+)
+
+## Hardware Gallery
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="docs/images/display.png" width="200px"/><br/>
+      <b>LCD Display</b><br/>
+      ST7735S 128×128 Color Display
+    </td>
+    <td align="center">
+      <img src="docs/images/pi zero 2.png" width="200px"/><br/>
+      <b>Raspberry Pi Zero 2 W</b><br/>
+      Main Controller
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="docs/images/battery.png" width="200px"/><br/>
+      <b>Battery Pack</b><br/>
+      18650 Battery Holder
+    </td>
+    <td align="center">
+      <img src="docs/images/psu.png" width="200px"/><br/>
+      <b>Power Supply</b><br/>
+      5V Power Module
+    </td>
+  </tr>
+</table>
 
 ## Installation
 
