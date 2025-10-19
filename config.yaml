@@ -1,0 +1,63 @@
+# TETSUO Display Configuration
+
+# Token information
+token:
+  symbol: TETSUO
+  chain: solana
+  mint: 8i51XNNpGaKaj4G4nDdmQh95v4FKAxw8mhtaRoKd9tE8
+
+# Primary trading pair (auto-filled by wizard)
+primary:
+  pair: ""  # Will be set to the highest liquidity TETSUO/SOL Raydium pool
+
+# Display settings
+display:
+  fiat: USD  # Display currency (USD, EUR, etc.)
+  width: 264   # Waveshare 2.7" is 264 (width) x 176 (height) - HORIZONTAL
+  height: 176
+  # Display mode: 'normal' to show price, 'blank' to keep the screen pure white
+  mode: blank
+  # GPIO pins for Waveshare 2.7" HAT (adjust if needed)
+  gpio:
+    dc_pin: 25
+    rst_pin: 17
+    busy_pin: 24
+    cs_pin: 8
+    spi_device: 0
+    spi_bus: 0
+
+# Polling and refresh settings
+poll:
+  interval_seconds: 6  # How often to fetch new data
+
+refresh:
+  full_every_minutes: 45  # Full refresh interval to clear ghosting
+  full_after_partials: 60  # Or after N partial updates
+
+# Network timeouts and retries
+timeouts:
+  seconds: 5
+
+retries:
+  max: 1
+
+# Data source endpoints
+sources:
+  dexscreener_pair: "https://api.dexscreener.com/latest/dex/pairs/solana/{PAIR}"
+  dexscreener_token: "https://api.dexscreener.com/latest/dex/tokens/{MINT}"
+  birdeye: "https://public-api.birdeye.so/public/price?address={MINT}"
+  geckoterminal: "https://api.geckoterminal.com/api/v2/networks/solana/tokens/{MINT}"
+
+# Fallback order (first to last)
+fallback:
+  order:
+    - dexscreener_pair
+    - dexscreener_token
+    - birdeye
+    - geckoterminal
+  # Staleness threshold for Dexscreener pair data (seconds)
+  stale_threshold_seconds: 180
+
+# Cache settings
+cache:
+  path: "./data/last_snapshot.json"

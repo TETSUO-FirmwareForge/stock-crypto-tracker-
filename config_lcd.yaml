@@ -1,0 +1,107 @@
+# TETSUO LCD Display Configuration
+# For 1.44" ST7735S 128x128 RGB LCD
+
+# Token information
+token:
+  symbol: TETSUO
+  chain: solana
+  mint: 8i51XNNpGaKaj4G4nDdmQh95v4FKAxw8mhtaRoKd9tE8
+
+# Primary trading pair (auto-filled by wizard)
+primary:
+  pair: ""  # Will be set to the highest liquidity TETSUO/SOL Raydium pool
+
+# Display settings
+display:
+  type: lcd  # Changed from e-paper to LCD
+  model: st7735s
+  fiat: USD  # Display currency (USD, EUR, etc.)
+  width: 128   # 1.44" LCD display resolution
+  height: 128
+  color_depth: 16  # 16-bit color (RGB565)
+
+  # Display modes
+  default_view: 0  # 0: Price, 1: Stats, 2: Chart
+  auto_rotate: true  # Auto-rotate between views
+  rotation_interval: 10  # Seconds between view changes
+
+  # GPIO pins for ST7735S LCD on Raspberry Pi
+  gpio:
+    dc_pin: 25      # Data/Command pin
+    rst_pin: 17     # Reset pin
+    cs_pin: 8       # Chip Select pin
+    bl_pin: 24      # Backlight pin
+    spi_device: 0
+    spi_bus: 0
+    spi_speed: 8000000  # 8MHz SPI speed
+
+  # Input pins for joystick and buttons
+  input:
+    joy_up: 6
+    joy_down: 19
+    joy_left: 5
+    joy_right: 26
+    joy_center: 13
+    button_k1: 21
+    button_k2: 20
+    button_k3: 16
+
+# LCD specific settings
+lcd:
+  brightness: 100  # Default brightness (0-100%)
+  auto_dim: true   # Auto-dim display when inactive
+  dim_after_seconds: 30
+  dim_brightness: 30
+
+  # Color scheme
+  colors:
+    price_up: green
+    price_down: red
+    price_neutral: white
+    background: black
+    text_primary: white
+    text_secondary: gray
+    accent: blue
+
+# Polling and refresh settings
+poll:
+  interval_seconds: 5  # How often to fetch new data (LCD can update faster)
+
+refresh:
+  fps: 10  # Target frames per second for smooth updates
+  chart_points: 30  # Number of points to show in price chart
+
+# Network timeouts and retries
+timeouts:
+  seconds: 5
+
+retries:
+  max: 1
+
+# Data source endpoints
+sources:
+  dexscreener_pair: "https://api.dexscreener.com/latest/dex/pairs/solana/{PAIR}"
+  dexscreener_token: "https://api.dexscreener.com/latest/dex/tokens/{MINT}"
+  birdeye: "https://public-api.birdeye.so/public/price?address={MINT}"
+  geckoterminal: "https://api.geckoterminal.com/api/v2/networks/solana/tokens/{MINT}"
+
+# Fallback order (first to last)
+fallback:
+  order:
+    - dexscreener_pair
+    - dexscreener_token
+    - birdeye
+    - geckoterminal
+  # Staleness threshold for Dexscreener pair data (seconds)
+  stale_threshold_seconds: 180
+
+# Cache settings
+cache:
+  path: "./data/last_snapshot.json"
+
+# Features
+features:
+  price_alerts: true  # Enable price alerts via buzzer/LED
+  alert_threshold_percent: 10  # Alert when price changes by this %
+  show_chart: true  # Enable price chart view
+  interactive: true  # Enable joystick/button interaction

@@ -1,0 +1,14 @@
+# Core dependencies
+requests>=2.31.0
+PyYAML>=6.0.1
+python-dotenv>=1.0.0
+
+# E-paper display support
+RPi.GPIO>=0.7.1
+spidev>=3.6
+
+# Image processing for rendering
+Pillow>=10.0.0
+
+# For layout proof (PNG generation)
+# Pillow handles this

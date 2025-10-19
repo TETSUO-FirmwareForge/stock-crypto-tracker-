@@ -1,0 +1,78 @@
+tetsuo-display/
+│
+├── 📄 README.md                    # Full documentation
+├── 📄 QUICKSTART.md                # 10-minute setup guide
+├── 📄 PROJECT_OVERVIEW.md          # Architecture & design doc
+├── 📄 LICENSE                      # MIT License
+├── 📄 .gitignore                   # Git ignore rules
+├── 📄 requirements.txt             # Python dependencies
+├── 📄 config.yaml                  # Main configuration
+├── 📄 .env.example                 # Environment template
+├── 📄 tetsuo-display.service       # Systemd service unit
+│
+├── 📁 app/                         # Core application
+│   ├── __init__.py
+│   ├── main.py                     # Main daemon (entry point)
+│   ├── config.py                   # Configuration loader
+│   ├── data_fetcher.py             # Multi-source API client
+│   ├── pair_resolver.py            # Trading pair resolver
+│   ├── display_driver.py           # E-paper hardware driver
+│   └── renderer.py                 # Display layout renderer
+│
+├── 📁 scripts/                     # Setup & utilities
+│   └── wizard.py                   # First-run setup wizard
+│
+├── 📁 tests/                       # Test suite
+│   ├── __init__.py
+│   ├── smoke_test.py               # API endpoint tests
+│   ├── layout_proof.py             # PNG layout generator
+│   └── display_test.py             # Hardware test
+│
+└── 📁 data/                        # Runtime (created automatically)
+    └── last_snapshot.json          # Cached data
+
+Components Overview:
+────────────────────────────────────────────────────────────
+
+🔧 Core Application (app/)
+   • main.py           - Daemon with polling loop, signal handling
+   • config.py         - YAML config loader with env integration
+   • data_fetcher.py   - 4-tier fallback (Dexscreener → Birdeye → GeckoTerminal)
+   • pair_resolver.py  - Auto-finds best liquidity pair
+   • display_driver.py - SPI control, partial/full refresh
+   • renderer.py       - PIL-based layout with smart refresh
+
+🎯 Setup & Management (scripts/)
+   • wizard.py         - Interactive setup (SPI, GPIO, API, display test)
+
+🧪 Testing (tests/)
+   • smoke_test.py     - Test all APIs, no hardware needed
+   • layout_proof.py   - Generate PNG previews
+   • display_test.py   - Test e-paper hardware
+
+📋 Configuration
+   • config.yaml       - All settings (token, pins, intervals, sources)
+   • .env              - Secrets (Birdeye API key)
+
+🔄 Service Management
+   • tetsuo-display.service - Systemd unit (auto-start, restart, logging)
+
+Key Features:
+────────────────────────────────────────────────────────────
+✓ Multi-source API fallback with exponential backoff
+✓ Persistent cache survives reboots and outages
+✓ Smart partial refresh (fast) vs full refresh (anti-ghosting)
+✓ Stale data indicator when offline
+✓ Auto-start on boot via systemd
+✓ Comprehensive error handling and logging
+✓ Hardware abstraction for testing without Pi
+✓ Interactive setup wizard
+✓ Complete test suite
+
+Stats:
+────────────────────────────────────────────────────────────
+Total Lines:  ~2,800 Python
+Files:        20 (7 core, 1 wizard, 3 tests, 9 config/docs)
+Dependencies: 6 (requests, PyYAML, python-dotenv, RPi.GPIO, spidev, Pillow)
+Ready for:    Production deployment on Raspberry Pi Zero 2 W
+

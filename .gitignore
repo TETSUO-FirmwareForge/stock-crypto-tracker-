@@ -1,0 +1,70 @@
+# Environment and secrets
+.env
+*.env
+!.env.example
+
+# Cache and data
+data/
+*.json
+!tests/*.json
+*.json.bak
+cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+tetsuo_lcd.log
+tetsuo_display.log
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# Backups & Archives
+*.backup
+*.bak
+*.tar
+*.tar.gz
+*.zip
+*.old
+*.orig
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.pid
+
+# Sensitive files
+*password*
+*secret*
+*credential*
+*private_key*
+*.pem
+*.key
+!*.pub

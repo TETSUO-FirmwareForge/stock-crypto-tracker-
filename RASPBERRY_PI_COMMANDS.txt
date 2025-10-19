@@ -1,0 +1,116 @@
+================================================================================
+COMANDOS PARA EJECUTAR EN TU RASPBERRY PI
+================================================================================
+
+MÉTODO 1: DESCARGAR DESDE TU MAC
+---------------------------------
+
+1. Abre una terminal en tu Raspberry Pi (SSH o directamente)
+
+2. Conéctate a tu Raspberry Pi:
+   ssh pi@192.168.2.209
+   (o usa el usuario que tengas configurado)
+
+3. Descarga el archivo desde tu Mac:
+   cd ~
+   wget http://127.160.126.170:8888/tetsuo-lcd.tar.gz
+
+   (Si el wget no funciona, prueba con curl):
+   curl -O http://127.160.126.170:8888/tetsuo-lcd.tar.gz
+
+4. Extrae los archivos:
+   mkdir -p ~/tetsuo-lcd
+   cd ~/tetsuo-lcd
+   tar xzf ~/tetsuo-lcd.tar.gz
+
+5. Organiza los archivos:
+   # Los archivos de app ya deberían estar en app/
+   # Crea directorios adicionales
+   mkdir -p data logs
+
+   # Da permisos de ejecución
+   chmod +x *.py *.sh
+
+6. Instala las dependencias:
+   bash install_lcd.sh
+
+7. Prueba el display LCD:
+   # Test rápido de colores
+   sudo python3 test_lcd.py --quick
+
+   # Test completo
+   sudo python3 test_lcd.py
+
+   # Ejecutar con datos en vivo
+   sudo python3 main_lcd.py
+
+================================================================================
+
+MÉTODO 2: SI NO PUEDES CONECTAR POR RED
+----------------------------------------
+
+1. Copia el archivo tetsuo-lcd.tar.gz a una memoria USB
+
+2. Inserta la USB en la Raspberry Pi
+
+3. Monta la USB:
+   sudo mkdir -p /mnt/usb
+   sudo mount /dev/sda1 /mnt/usb
+
+4. Copia el archivo:
+   cp /mnt/usb/tetsuo-lcd.tar.gz ~/
+
+5. Continúa desde el paso 4 del Método 1
+
+================================================================================
+
+VERIFICACIÓN DE FUNCIONAMIENTO
+-------------------------------
+
+# Ver si el LCD responde:
+sudo python3 -c "
+from app.lcd_driver_st7735 import ST7735
+lcd = ST7735()
+lcd.init()
+print('LCD inicializado')
+lcd.clear(lcd.GREEN)
+print('Pantalla verde - ¿La ves?')
+import time
+time.sleep(2)
+lcd.cleanup()
+"
+
+# Si funciona, ejecuta el programa principal:
+sudo python3 main_lcd.py
+
+================================================================================
+
+SOLUCIÓN DE PROBLEMAS
+----------------------
+
+Si dice "No module named RPi":
+  sudo apt install python3-rpi.gpio
+
+Si dice "No module named spidev":
+  sudo apt install python3-spidev
+
+Si dice "Permission denied":
+  Usa 'sudo' antes del comando
+
+Si dice "SPI device not found":
+  sudo raspi-config
+  -> Interface Options -> SPI -> Enable
+  -> Reboot
+
+================================================================================
+
+PARA EJECUTAR AUTOMÁTICAMENTE AL INICIO
+----------------------------------------
+
+sudo cp tetsuo-lcd.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable tetsuo-lcd
+sudo systemctl start tetsuo-lcd
+sudo systemctl status tetsuo-lcd
+
+================================================================================

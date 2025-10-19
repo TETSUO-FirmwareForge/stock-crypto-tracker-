@@ -1,0 +1,168 @@
+═══════════════════════════════════════════════════════════════
+  TETSUO DISPLAY - COMANDOS DE INSTALACIÓN PASO A PASO
+═══════════════════════════════════════════════════════════════
+
+IMPORTANTE: Necesitas la IP de tu Raspberry Pi primero.
+
+═══════════════════════════════════════════════════════════════
+PASO 0: ENCONTRAR LA IP DE TU RASPBERRY PI
+═══════════════════════════════════════════════════════════════
+
+Ejecuta esto en tu Mac para encontrar el Raspberry Pi:
+
+arp -a | grep -i "b8:27:eb\|dc:a6:32\|e4:5f:01"
+
+O si tienes nmap instalado:
+
+nmap -sn 192.168.1.0/24 | grep -B 2 "Raspberry"
+
+Si ves tu Pi, anota la IP (ejemplo: 192.168.1.100)
+
+═══════════════════════════════════════════════════════════════
+PASO 1: TRANSFERIR EL PROYECTO (DESDE TU MAC)
+═══════════════════════════════════════════════════════════════
+
+Reemplaza <IP> con la IP real de tu Raspberry Pi:
+
+scp -r ~/Desktop/tetsuo-display/ pi@<IP>:~/
+
+Ejemplo si tu IP es 192.168.1.100:
+scp -r ~/Desktop/tetsuo-display/ pi@192.168.1.100:~/
+
+Contraseña: 5157
+
+═══════════════════════════════════════════════════════════════
+PASO 2: CONECTARSE AL RASPBERRY PI
+═══════════════════════════════════════════════════════════════
+
+ssh pi@<IP>
+
+Contraseña: 5157
+
+═══════════════════════════════════════════════════════════════
+PASO 3: EJECUTAR INSTALACIÓN AUTOMÁTICA
+═══════════════════════════════════════════════════════════════
+
+Una vez conectado al Pi, ejecuta estos comandos:
+
+cd ~/tetsuo-display
+chmod +x install.sh
+./install.sh
+
+El script te preguntará algunas cosas, responde:
+- Run wizard now? → Y (presiona Y y Enter)
+
+═══════════════════════════════════════════════════════════════
+PASO 3 ALTERNATIVO: INSTALACIÓN MANUAL COMPLETA
+═══════════════════════════════════════════════════════════════
+
+Si prefieres hacerlo paso por paso, copia y pega TODOS estos comandos:
+
+# Actualizar sistema
+sudo apt update
+sudo apt install -y python3 python3-pip python3-venv git
+
+# Ir al proyecto
+cd ~/tetsuo-display
+
+# Crear entorno virtual
+python3 -m venv venv
+
+# Activar entorno
+source venv/bin/activate
+
+# Instalar dependencias
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# Copiar archivo de entorno
+cp .env.example .env
+
+# Ejecutar el wizard
+python3 scripts/wizard.py
+
+═══════════════════════════════════════════════════════════════
+PASO 4: RESPONDER AL WIZARD
+═══════════════════════════════════════════════════════════════
+
+El wizard te hará preguntas, responde así:
+
+1. "Continue with setup?" → y
+2. "Is this pinout correct?" → y
+3. "Use this pair?" → y
+4. "Do you have a Birdeye API key?" → n
+5. "Run display test?" → y
+6. "Do you see the test pattern?" → y (si ves algo en la pantalla)
+7. "Install service now?" → y
+8. "Start service now?" → y
+
+═══════════════════════════════════════════════════════════════
+PASO 5: VERIFICAR QUE FUNCIONA
+═══════════════════════════════════════════════════════════════
+
+Después de la instalación, verifica:
+
+# Ver estado del servicio
+sudo systemctl status tetsuo-display
+
+# Ver logs en tiempo real (Ctrl+C para salir)
+sudo journalctl -u tetsuo-display -f
+
+Deberías ver mensajes como:
+- "Starting TETSUO display..."
+- "Fetching data..."
+- "Display updated"
+
+Y tu pantalla e-paper debería mostrar el precio de TETSUO!
+
+═══════════════════════════════════════════════════════════════
+COMANDOS ÚTILES
+═══════════════════════════════════════════════════════════════
+
+# Reiniciar el servicio
+sudo systemctl restart tetsuo-display
+
+# Detener el servicio
+sudo systemctl stop tetsuo-display
+
+# Ver últimas 50 líneas del log
+sudo journalctl -u tetsuo-display -n 50
+
+# Editar configuración
+nano ~/tetsuo-display/config.yaml
+
+# Después de editar config, reiniciar:
+sudo systemctl restart tetsuo-display
+
+═══════════════════════════════════════════════════════════════
+SI ALGO FALLA
+═══════════════════════════════════════════════════════════════
+
+1. SPI no está habilitado:
+   sudo raspi-config
+   → Interface Options → SPI → Enable
+   → Reboot
+
+2. Ver errores en detalle:
+   sudo journalctl -u tetsuo-display -n 100 --no-pager
+
+3. Probar manualmente:
+   cd ~/tetsuo-display
+   source venv/bin/activate
+   python3 app/main.py
+
+4. Probar APIs sin hardware:
+   cd ~/tetsuo-display
+   source venv/bin/activate
+   python3 tests/smoke_test.py
+
+═══════════════════════════════════════════════════════════════
+¡LISTO! 🚀
+═══════════════════════════════════════════════════════════════
+
+Si todo salió bien, tu pantalla e-paper ahora muestra el precio
+de TETSUO y se actualiza automáticamente cada 45 segundos.
+
+El display sobrevivirá reinicios, caídas de internet, etc.
+
+¡Disfruta tu display de TETSUO!

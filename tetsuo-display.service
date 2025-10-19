@@ -1,0 +1,28 @@
+[Unit]
+Description=TETSUO E-Paper Display
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sa
+Group=sa
+WorkingDirectory=/home/sa/tetsuo-display
+Environment="PATH=/home/sa/tetsuo-display/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ExecStart=/home/sa/tetsuo-display/venv/bin/python3 /home/sa/tetsuo-display/app/main.py --config /home/sa/tetsuo-display/config.yaml
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=tetsuo-display
+
+# Security (optional hardening)
+# NoNewPrivileges=true
+# PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
